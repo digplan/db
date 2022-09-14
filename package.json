@@ -1,0 +1,11 @@
+{
+  "name": "schema",
+  "version": "0.0.1",
+  "description": "",
+  "main": "module.mjs",
+  "scripts": {
+    "test": "node test.mjs"
+  },
+  "author": "",
+  "license": "ISC"
+}
