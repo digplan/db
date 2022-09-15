@@ -1,0 +1,9 @@
+{
+  "_fieldtype_newdate": {
+    "create": "new Date().toISOString()"
+  },
+  "Base": {
+    "id": "string",
+    "created": "newdate"
+  }
+}
