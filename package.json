@@ -1,7 +1,7 @@
 {
   "name": "schema",
   "version": "0.0.1",
-  "description": "",
+  "description": "JSON object validator",
   "main": "module.mjs",
   "scripts": {
     "test": "node test.mjs"

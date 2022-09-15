@@ -1,7 +1,11 @@
-import { Schema } from './module.mjs'
+import Validator from './module.mjs'
+import SchemaDefinition from './test-schema.mjs'
 import assert from 'node:assert/strict'
 
-const s = new Schema()
+const bad_constructor = () => new Validator()
+assert.throws(bad_constructor, /Error: provide a schema definition/)
+
+const s = new Validator(SchemaDefinition)
 assert.equal(s.schema.Base.id, 'string')
 
 const testok = s.validate({'id': 'cb', 'name': 'cb'}, 'TestType')
@@ -33,5 +37,15 @@ assert.equal(dont_overwrite_values.created, '2010-01-01')
 
 const use_object_for_custom_field = s.validate({date: '2021-01-01', age: 50}, 'TestType2')
 assert.equal(use_object_for_custom_field.old, false)
+
+const invalid = SchemaDefinition._fieldtype_datetype.enforce('xxxx')
+assert.equal(invalid, false)
+
+const valid = SchemaDefinition._fieldtype_datetype.enforce('2021-01-01')
+assert.equal(valid, true)
+
+const { create } = SchemaDefinition._fieldtype_isOld
+const transform = create(40)
+assert.equal(transform, true)
 
 console.log('test complete')

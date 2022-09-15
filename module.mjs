@@ -1,9 +1,8 @@
-import file from './schema.mjs'
-
-class Schema {
+class SchemaEngine {
     schema
     constructor(def) {
-        this.schema = def || file
+        if(!def) throw Error('provide a schema definition')
+        this.schema = def
     }
     validate(obj, type) {
         // Get validator def
@@ -43,4 +42,4 @@ class Schema {
     }
 }
 
-export { Schema }
+export default SchemaEngine
