@@ -13,25 +13,40 @@ class Schema {
         Object.assign(base, validator)
         // Check provided obj
         for(let k in obj) {
-            const value = obj[k]
-            if(!base[k] && !base[k].endsWith('?')) 
+          const value = obj[k]
+          const required_type = base[k] || base[k+'?']
+          if (!required_type) 
               return {ok: false, error: `required field ${k} not in type "${type}"`}
-            const typename = base[k].replace('?', '')
-            if(typeof value !== typename) {
-                const custom = base['_fieldtype_' + typename].enforce
+          if (typeof value !== required_type) {
+                const custom = this.schema['_fieldtype_' + required_type]?.enforce
                 if(!custom) 
                   return { ok: false, error: `a custom type for ${typename} does not exist`}
                 if(!custom(value)) 
-                  return { ok: false, error: `${value} not valid for custom type "${type}"` }
-            }
+                  return { ok: false, error: `value: ${value} not valid for custom type "${type}"` }
+          }
         }
-        for(let bk in base) {
-            const custom_create = base['_fieldtype_' + base[bk]]?.create
-            if(!obj[bk]) {
-              if(!custom_create && !bk.endsWith('?'))
-                return { ok: false, error: `required field ${bk} does not exist in object` }
-              obj[bk] = custom_create()
-            }
+        for(let field in base) {
+          if(field === '_extends')
+            continue
+          const isOptional = field.endsWith('?')
+          const required_type = base[field] || base[field + '?']
+          const custom_value = this.schema['_fieldtype_' + required_type]?.create()
+          const custom_valid = this.schema['_fieldtype_' + required_type]?.enforce
+          const real_field_name = field.replace('?', '')
+          const value = obj[real_field_name]
+          if (custom_value) {
+            obj[real_field_name] = custom_value
+            continue
+          }
+          if (!isOptional && (typeof value === 'undefined')) {
+            return { ok: false, error: `required field ${field} does not exist` }
+          }
+          if (value && !custom_valid && (typeof value !== required_type)) {
+            return { ok: false, error: `field ${real_field_name} is not type ${required_type}` }
+          }
+          if (value && custom_valid && !custom_valid(value)) {
+            return { ok: false, error: `value ${value} is not type ${required_type}` }
+          }
         }
         return {ok: obj}
     }
