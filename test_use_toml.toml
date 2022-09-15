@@ -1,8 +1,30 @@
 # npx c-toml test_use_toml.toml
 
-[_fieldtype_newdate]
-create = "new Date().toISOString()"
+[_fieldtype_date]
+create = "x => new Date().toISOString()",
+enforce = "x => new Date(x) !== 'invalid date'"
 
 [Base]
 id = "string"
-created = "newdate"
+type = "string"
+created = "date"
+updated = "date"
+
+[Person]
+[Location]
+[Country]
+[Company]
+[Task]
+[Property]
+[Credential]
+[Application]
+[Approval]
+[PhysicalItem]
+[Service]
+[Credential]
+[Request]
+[RequestItem]
+[Incident]
+[CostCenter]
+[LOB]
+[Department]
