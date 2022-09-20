@@ -2,6 +2,8 @@ import 'http' from 'node:http'
 import { writeFileSync } from 'node:fs'
 import Schema from './schema.mjs'
 import db from './db.mjs'
+import clientjs from './client.js' assert {type: 'json'}
+
 const { debug } = process.env
 const { _queries as queries, validate } = new Schema()
 
@@ -31,16 +33,7 @@ http.createServer(({method, headers, url}, s) => {
       return (delete db[v] && s.end('ok'))
       
     if(url === '/client.js') {
-      return s.end(`
-         window.db = async (action, param, param2, o) => {
-            const u = `/api/${param}` + (param2 ? `/${param2}` : '')
-            const f = await fetch(u, {method: action, headers: {data: JSON.stringify(o)}})
-            const j = await f.json()
-            if(action.match(/POST|PUT/i) && j !== 'ok')
-              throw Error(`error: ${action} returned ${j}`)
-            return j
-         }
-      `) 
+      return s.end(clientjs)
     }
                    
     throw Error(404)
