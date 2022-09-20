@@ -1,11 +1,11 @@
 import 'http' from 'node:http'
 import { writeFileSync } from 'node:fs'
-import queries from './queries.mjs'
 import schema from './schema.mjs'
 import db from './db.mjs'
 const { debug } = process.env
 
 const validate = new schema()
+const { queries } = validate
 
 http.createServer(({method, headers, url}, s) => {
   try {
