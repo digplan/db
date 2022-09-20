@@ -2,6 +2,10 @@ class SchemaEngine {
     schema
     constructor(def) {
         if(!def) throw Error('provide a schema definition')
+        if(def?._queries) {
+            for(const v in def._queries)
+                def._queries[v] = eval(def._queries[v])
+        }
         this.schema = def
     }
     getSchemaFor(type) {
