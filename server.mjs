@@ -23,7 +23,7 @@ http.createServer(({method, headers, url}, s) => {
       if(k && v && queries[k])
         return s.end(JSON.stringify(queries[k](v)))
     }
-    
+     
     if((action == 'insert' && !db[p]) || (action == 'update' && db[p])) {
       let data = JSON.parse(unescape(p2))
       const [type, id] = p.split(':')
