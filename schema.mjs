@@ -1,4 +1,4 @@
-{
+export default {
   "_fieldtype_date": {
     "create": "x => new Date().toISOString()",
     "enforce": "x => new Date(x) !== 'invalid date'"
@@ -9,5 +9,6 @@
     "created": "date",
     "updated": "date"
   },
-  "Person": {}
+  "Person": {},
+  "Location": {}
 }
