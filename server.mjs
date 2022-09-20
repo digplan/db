@@ -8,7 +8,7 @@ const { _queries as queries, validate } = new Schema()
 http.createServer(({method, headers, url}, s) => {
   try {
     console.log(method, url)
-    const [null, prefix, action, param] = url.split('/')
+    const [null, prefix, action, param, param2] = url.split('/')
     if(debug) console.log('url is ', prefix, action, param)
     
     if(method == 'GET') {
@@ -32,8 +32,9 @@ http.createServer(({method, headers, url}, s) => {
       
     if(url === '/client.js') {
       return s.end(`
-         window.db = async (action, o = {}, param) => {
-            const f = await fetch(`/api/${param}`, {method: action, headers: {data: JSON.stringify(o)}})
+         window.db = async (action, param, param2, o) => {
+            const u = `/api/${param}` + (param2 ? `/${param2}` : '')
+            const f = await fetch(u, {method: action, headers: {data: JSON.stringify(o)}})
             const j = await f.json()
             if(action.match(/POST|PUT/i) && j !== 'ok')
               throw Error(`error: ${action} returned ${j}`)
