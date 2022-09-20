@@ -4,23 +4,30 @@ class SchemaEngine {
         if(!def) throw Error('provide a schema definition')
         this.schema = def
     }
+    getSchemaFor(type) {
+      if (!this.schema[type]) throw Error(`provided type ${type} does not exist in the schema`)
+      let base = { ...this.schema[type] }, tmp = { ...base }, v = tmp = { ...base }
+      while (tmp = this.schema[tmp._extends]) {
+        for (let k in tmp) 
+          if(k !== '_extends') v[k] = tmp[k]
+      }
+      return v
+    }
     validate(obj, type) {
         // Get validator def
-        let validator = this.schema[type]
-        if(!validator) throw Error(`provided type ${type} does not exist in schema`)
-        const base = this.schema[validator?._extends] || {}
-        Object.assign(base, validator)
+        if (!this.schema[type]) throw Error(`provided type ${type} does not exist in the schema`)
+        const base = this.getSchemaFor(type)
         // Check provided obj
         for(let k in obj) {
           const value = obj[k]
           const required_type = base[k] || base[k+'?']
           const custom_valid = this.schema['_fieldtype_' + required_type]?.enforce
           if (!required_type) 
-            throw new Error(`required field ${k} not in type "${type}"`)
+            throw new Error(`provided field ${k} = "${obj[k]}" not in type "${type}", ${JSON.stringify(base)}`)
           if (custom_valid && !custom_valid(value))
-            throw new Error(`value: ${value} not valid for custom field type "${required_type}"`)
+            throw new Error(`value: "${value}" not valid for field type "${required_type}", schema is ${JSON.stringify(base)}`)
           if (!custom_valid && (typeof value !== required_type))
-            throw new Error(`value: ${value} not valid for field type "${required_type}"`)
+            throw new Error(`value: "${value}" not valid for field type "${required_type}"`)
         }
         for(let field in base) {
           if(field === '_extends') continue

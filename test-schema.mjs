@@ -23,5 +23,9 @@ export default {
         date: 'datetype',
         'age?': 'number',
         'old?': 'isOld'
+    },
+    ExtendExtend: {
+        _extends: 'TestType',
+        'ee': 'string'
     }
 }
