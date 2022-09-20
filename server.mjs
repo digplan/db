@@ -6,7 +6,7 @@ import db from './db.json' assert {type: 'json'}
 
 
 const { debug } = process.env
-const { queries, validate } = new Validator(schema)
+const { validate } = new Validator(schema)
 
 http.createServer(({method, headers, url}, s) => {
   try {
