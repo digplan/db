@@ -5,7 +5,7 @@ import db from './db.mjs'
 const { debug } = process.env
 
 const validate = new schema()
-const { queries } = validate
+const { _queries as queries } = validate
 
 http.createServer(({method, headers, url}, s) => {
   try {
