@@ -25,7 +25,7 @@ http.createServer(({method, headers, url}, s) => {
       const data = JSON.parse(headers.data)
       data = validate(data, data.type)
       db[k] = data
-      writeFileSync('./db.mjs', 'export default ' + JSON.stringify(db, null, 2))
+      writeFileSync('./db.mjs', JSON.stringify(db, null, 2))
       return s.end('ok')         
     }
                    
