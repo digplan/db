@@ -30,6 +30,17 @@ http.createServer(({method, headers, url}, s) => {
                    
     if(method == 'DELETE' && v && db[v])
       return (delete db[v] && s.end('ok'))
+      
+    if(url === '/client.js') {
+      return s.end(`
+         window.db = {}
+         window.db.get = async (k) => await (await fetch(`/${k}`)).json()
+         window.db.query = async (name, p = '') => await (await fetch(`/${name}/${p}`)).json()
+         window.db.insert = async (k, o) => await (await fetch(`/${k}`, {method: 'POST', headers: {data: o}})).json()
+         window.db.update = async (k, o) => await (await fetch(`/${k}`), {method: 'PUT', headers: {data: o}}).json()
+         window.db.delete = async (id) => await (await fetch(`/${id}`, {method: 'DELETE'})).json()
+      `) 
+    }
                    
     throw Error(404)
     
