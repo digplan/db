@@ -1,45 +1,48 @@
-import 'http' from 'node:http'
+import http from 'node:http'
 import { writeFileSync } from 'node:fs'
-import Schema from './schema.mjs'
-import db from './db.mjs'
-import clientjs from './client.js' assert {type: 'json'}
+import Validator from './module.mjs'
+import schema from './test-schema.mjs' 
+import db from './db.json' assert {type: 'json'}
+
 
 const { debug } = process.env
-const { _queries as queries, validate } = new Schema()
+const { queries, validate } = new Validator(schema)
 
 http.createServer(({method, headers, url}, s) => {
   try {
-    console.log(method, url)
-    const [null, prefix, action, param, param2] = url.split('/')
-    if(debug) console.log('url is ', prefix, action, param)
+    console.log('REQUEST', method, url)
+    const [host, prefixapi, action, p, p2] = url.split('/')
+
+    if(!action) throw Error()
+
+    if(debug) console.log('url is ', action, p, p2)
     
-    if(method == 'GET') {
-      if(debug) console.log(`GET request for key ${param}`)
+    if(action == 'get') {
       if(v && !k && db[v]) 
         return s.end(JSON.stringify(db[v]))
       if(k && v && queries[k])
-        return s.end(JSON.stringify(queries[k](v))
+        return s.end(JSON.stringify(queries[k](v)))
     }
     
-    if(headers?.data && v && ((method=='POST' && !db[v]) || (method=='PUT' && db[v])) {
-      const data = JSON.parse(headers.data)
-      data = validate(data, data.type)
-      db[k] = data
+    if((action == 'insert' && !db[p]) || (action == 'update' && db[p])) {
+      let data = JSON.parse(unescape(p2))
+      const [type, id] = p.split(':')
+      data = validate(data, type)
+      db[p] = data
       writeFileSync('./db.mjs', 'export default ' + JSON.stringify(db, null, 2))
       return s.end('ok')         
     }
                    
-    if(method == 'DELETE' && v && db[v])
+    if(action == 'DELETE' && v && db[v])
       return (delete db[v] && s.end('ok'))
       
     if(url === '/client.js') {
-      return s.end(clientjs)
     }
                    
-    throw Error(404)
+    throw Error('404')
     
   } catch(e) {
-    s.writeHead(e).end(e)      
+    s.end(e.message)      
   }
                  
 }).listen(3000)

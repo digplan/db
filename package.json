@@ -5,7 +5,8 @@
   "main": "module.mjs",
   "scripts": {
     "test": "node test.mjs",
-    "build" : "npx c-toml schema.toml && echo \"export default $(cat schema.json)\" > schema.mjs && rm schema.json"
+    "build" : "npx c-toml schema.toml && echo \"export default $(cat schema.json)\" > schema.mjs && rm schema.json",
+    "start": "node --no-warnings server.mjs"
   },
   "author": "",
   "license": "ISC"
