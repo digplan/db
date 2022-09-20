@@ -1,9 +1,6 @@
 # > npx c-toml schema.toml 
 #     => schema.json
 
-[_queries]
-users = "[k, v] => k.match(/^users:/)"
-
 [_fieldtype_date]
 create = "x => new Date().toISOString()"
 enforce = "x => new Date(x) !== 'invalid date'"
