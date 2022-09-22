@@ -29,5 +29,6 @@ export default {
       save(db, './db.json')
       return 'ok delete'
     }
-  }
+  },
+  schema: () => JSON.stringify(schema)
 }
