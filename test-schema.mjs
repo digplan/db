@@ -1,5 +1,5 @@
 export default {
-    queries: {
+    _queries: {
         "all": x => x,
     },
     _fieldtype_newdate: {
