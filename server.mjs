@@ -4,7 +4,7 @@ import schema from './test-schema.mjs'
 import db from './db.json' assert {type: 'json'}
 import { save } from 'instax'
 
-const { debug } = process.env
+const { debug, port, routes } = process.env
 const v = new Validator(schema)
 
 http.createServer(({method, headers, url}, s) => {
