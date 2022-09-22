@@ -13,3 +13,12 @@ window.db = async (action, param, param2={}) => {
         throw Error(`error: ${action} returned ${j}`)
     return j
 }
+
+customElements.define('data-source', class DataSource extends HTMLElement {
+    constructor() {
+        fetch('/schema').then(this.parse)
+    }
+    async parse(f) {
+        window.state.schema = await f.json()
+    }
+})
