@@ -1,4 +1,4 @@
-import Validator from './module.mjs'
+import { eSchema as Validator } from './module.mjs'
 import SchemaDefinition from './test-schema.mjs'
 import assert from 'node:assert/strict'
 
@@ -61,15 +61,29 @@ assert.equal(schema_def_extended.name, 'string')
 assert.equal(schema_def_extended.id, 'string')
 assert.equal(schema_def_extended.created, 'newdate')
 
-const explicit = new Validator({
-    "MyType" : {
+const jschema = {
+    "MyType": {
         "name": "string",
         "type": "string"
     }
-})
-
+}
+const explicit = new Validator(jschema)
 const badvals = () => explicit.validate({}, 'DoesntExist')
 assert.throws(badvals, /Error: provided type DoesntExist does not exist in the schema/)
 assert.equal(explicit.validate({name: 'myname', type: 'mytypeval'}, 'MyType').name, 'myname')
+
+// Server
+import serve from 'instaserve'
+import routes from './routes.mjs'
+serve(routes)
+
+// Fetch DB
+import { FetchDB } from './module.mjs'
+import schema from './test-schema.mjs'
+
+const DB = new FetchDB(schema)
+DB.remoteHost = 'http://localhost:3000'
+const insert = await DB.insert('Base:Test2', {id: 'somevalue'}, 'Base')
+console.log(insert)
 
 console.log('test complete')

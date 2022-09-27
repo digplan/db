@@ -1,4 +1,4 @@
-import Validator from './module.mjs'
+import { eSchema as Validator } from './module.mjs'
 import schema from './test-schema.mjs' 
 import db from './db.json' assert {type: 'json'}
 import { save } from 'instax'
@@ -21,13 +21,13 @@ export default {
       data = v.validate(data, type)
       db[p] = data
       save(db, './db.json')
-      return 'ok ' + action       
+      return { ok: action }      
     }
                
     if(action == 'delete') {
       delete db[p]
       save(db, './db.json')
-      return 'ok delete'
+      return { ok: action }
     }
   },
   schema: () => JSON.stringify(schema)

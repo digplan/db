@@ -103,22 +103,23 @@ class FetchDB extends eSchema {
     super(schema)
   }
   async f(url, options) {
-    return await (await fetch(remoteHost + url, options)).json()
+    return await (await fetch(this.remoteHost + url, options)).json()
   }
   async insert(id, o, type) {
     this.validate(o, type)
-    return this.f(`/api/insert/${JSON.stringify(o)}`).ok
+    return this.f(`/api/insert/${id}/${JSON.stringify(o)}`).ok
   }
   async update(id, o, type) {
     this.validate(o, type)
-    return this.f(`/api/update/${JSON.stringify(o)}`).ok
+    return this.f(`/api/update/${id}/${JSON.stringify(o)}`).ok
   }
   async get(id) {
     return this.f(`/api/get/${id}`)
   }
   async delete(id) {
-    return this.f(`/api/delete/${JSON.stringify(o)}`).ok
+    return this.f(`/api/delete/${id}`).ok
   }
+
 }
 
 export { eSchema, LocalStorageDB, StateDB, FetchDB }

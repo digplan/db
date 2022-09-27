@@ -1,1 +1,10 @@
-{}
+{
+  "Base:Test1": {
+    "id": "somevalue",
+    "created": "2022-09-27T22:41:55.610Z"
+  },
+  "Base:Test2": {
+    "id": "somevalue",
+    "created": "2022-09-27T22:56:13.324Z"
+  }
+}

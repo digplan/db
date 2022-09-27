@@ -5,9 +5,12 @@
   "main": "module.mjs",
   "scripts": {
     "test": "node test.mjs",
-    "build" : "npx c-toml schema.toml && echo \"export default $(cat schema.json)\" > schema.mjs && rm schema.json",
+    "build": "npx c-toml schema.toml && echo \"export default $(cat schema.json)\" > schema.mjs && rm schema.json",
     "start": "node --no-warnings server.mjs"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "instaserve": "^0.1.17"
+  }
 }
