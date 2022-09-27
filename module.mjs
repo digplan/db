@@ -103,15 +103,17 @@ class FetchDB extends eSchema {
     super(schema)
   }
   async f(url, options) {
-    return await (await fetch(this.remoteHost + url, options)).json()
+    const fet = await (await fetch(this.remoteHost + url, options)).json()
+    if(fet.error) throw new Error('client error: ' + fet.error)
+    return fet
   }
   async insert(id, o, type) {
     this.validate(o, type)
-    return this.f(`/api/insert/${id}/${JSON.stringify(o)}`).ok
+    return this.f(`/api/insert/${id}/${JSON.stringify(o)}`)
   }
   async update(id, o, type) {
     this.validate(o, type)
-    return this.f(`/api/update/${id}/${JSON.stringify(o)}`).ok
+    return this.f(`/api/update/${id}/${JSON.stringify(o)}`)
   }
   async get(id) {
     return this.f(`/api/get/${id}`)
