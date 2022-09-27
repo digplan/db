@@ -7,7 +7,6 @@ class SchemaEngine {
                 def._queries[v] = eval(def._queries[v])
         }
         this.schema = def
-        console.log(this.schema)
     }
     getSchemaFor(type) {
       if (!this.schema[type]) throw Error(`provided type ${type} does not exist in the schema`)
@@ -55,3 +54,4 @@ class SchemaEngine {
 }
 
 export default SchemaEngine
+globalThis.eSchema = SchemaEngine

@@ -61,4 +61,15 @@ assert.equal(schema_def_extended.name, 'string')
 assert.equal(schema_def_extended.id, 'string')
 assert.equal(schema_def_extended.created, 'newdate')
 
+const explicit = new Validator({
+    "MyType" : {
+        "name": "string",
+        "type": "string"
+    }
+})
+
+const badvals = () => explicit.validate({}, 'DoesntExist')
+assert.throws(badvals, /Error: provided type DoesntExist does not exist in the schema/)
+assert.equal(explicit.validate({name: 'myname', type: 'mytypeval'}, 'MyType').name, 'myname')
+
 console.log('test complete')
