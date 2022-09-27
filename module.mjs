@@ -1,4 +1,4 @@
-class SchemaEngine {
+class eSchema {
     schema
     constructor(def) {
         if(!def) throw Error('provide a schema definition')
@@ -53,5 +53,76 @@ class SchemaEngine {
     }
 }
 
-export default SchemaEngine
-globalThis.eSchema = SchemaEngine
+class LocalStorageDB extends eSchema {
+  constructor(schema) {
+    super(schema)
+  }
+  insert(id, o, type) {
+    this.validate(o, type)
+    if (localStorage.getItem(id)) throw Error('exists')
+    localStorage.setItem(id, JSON.stringify(o))
+  }
+  update(id, o, type) {
+    this.validate(o, type)
+    if (!localStorage.getItem(id)) throw Error('does not exist')
+    localStorage.setItem(id, JSON.stringify(o))
+  }
+  get(id) {
+    return JSON.parse(localStorage.getItem(id)?.toString())
+  }
+  delete(id) {
+    return localStorage.removeItem(id)
+  }
+}
+
+class StateDB extends eSchema {
+  constructor(schema) {
+    super(schema)
+  }
+  insert(id, o, type) {
+    this.validate(o, type)
+    if (state[id]) throw Error('exists')
+    state[id] = o
+  }
+  update(id, o, type) {
+    this.validate(o, type)
+    if (!state[id]) throw Error('does not exist')
+    state[id] = o
+  }
+  get(id) {
+    return state[id]
+  }
+  delete(id) {
+    delete state[id]
+  }
+}
+
+class FetchDB extends eSchema {
+  remoteHost = ''
+  constructor(schema) {
+    super(schema)
+  }
+  async f(url, options) {
+    return await (await fetch(remoteHost + url, options)).json()
+  }
+  async insert(id, o, type) {
+    this.validate(o, type)
+    return this.f(`/api/insert/${JSON.stringify(o)}`).ok
+  }
+  async update(id, o, type) {
+    this.validate(o, type)
+    return this.f(`/api/update/${JSON.stringify(o)}`).ok
+  }
+  async get(id) {
+    return this.f(`/api/get/${id}`)
+  }
+  async delete(id) {
+    return this.f(`/api/delete/${JSON.stringify(o)}`).ok
+  }
+}
+
+export { eSchema, LocalStorageDB, StateDB, FetchDB }
+globalThis.eSchema = eSchema
+globalThis.LocalStorageDB = LocalStorageDB
+globalThis.StateDB = StateDB
+globalThis.FetchDB = FetchDB
