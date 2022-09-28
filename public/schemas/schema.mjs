@@ -14,7 +14,8 @@ const schema = {
     "type": "string",
     "created": "date",
     "updated": "date",
-    "color": "color"
+    "color": "color",
+    "tf": "boolean"
   }
 
 }

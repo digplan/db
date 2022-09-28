@@ -26,7 +26,6 @@
         let ht = ''
         if(o[k].match(/string|number|boolean|date|color/)) {
           o[k] = o[k] === 'boolean' ? 'checkbox' : o[k]
-          o[k] = o[k] === 'datetype' ? 'date' : o[k] 
           ht = `<input type='${o[k]}'></input>`
           console.log(k + ' ' + o[k] + ' ' + ht)
         } else {
