@@ -8,11 +8,22 @@
 
   customElements.define('my-db', class M extends HTMLElement {
     connectedCallback() {
-      Object.keys(db.schema).map(i=>{
-        this.innerHTML += i + ' ' + JSON.stringify(db.schema[i])+ '<br>'
+      const s = new eSchema(schema)
+      let i = 0
+      Object.keys(db.schema).filter(n=>!n.match(/^_/)).map(typename=>{
+        const td = JSON.stringify(s.getSchemaFor(typename))
+        this.innerHTML += `<button onclick="state.detail = ${td}">${typename}</button>`
       })
+    }
+  });
+
+  customElements.define('my-dbdetail', class M extends HTMLElement {
+    set(o) {
+      this.innerHTML = o
     }
   });
 </script>
 
 <my-db></my-db>
+<br>
+<my-dbdetail data="detail"></my-dbdetail>
