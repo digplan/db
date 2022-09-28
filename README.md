@@ -1,5 +1,5 @@
+### Usage
 ````
-Usage:
 const s = new eSchema(schemajson)
 s.validate({'id': 'cb', 'name': 'cb'}, 'TestType')
 
