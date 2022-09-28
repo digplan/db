@@ -4,8 +4,9 @@ const schema = {
     enforce: x => (new Date(x) !== 'invalid date')
   },
   "Base": {
-    "type": "string",
+    "id": "string",
     "name": "string",
+    "type": "string",
     "created": "date",
     "updated": "date"
   }

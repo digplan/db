@@ -52,4 +52,7 @@ Test:
  
 Keep server running after test:
 > npm test keepalive
+
+Or just start a server, and open a browser to index.html
+> routes=routes.mjs npx instaserve
 ````

@@ -1,4 +1,4 @@
-export default {
+const schema = {
     _queries: {
         "all": x => x,
     },
@@ -32,3 +32,6 @@ export default {
         'ee': 'string'
     }
 }
+
+export default schema
+globalThis.schema = schema
