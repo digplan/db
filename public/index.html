@@ -26,16 +26,25 @@
         let ht = ''
         if(o[k].match(/string|number|boolean|date|color/)) {
           o[k] = o[k] === 'boolean' ? 'checkbox' : o[k]
-          ht = `<input type='${o[k]}'></input>`
+          ht = `<input field='${k}' type='${o[k]}'></input>`
           console.log(k + ' ' + o[k] + ' ' + ht)
         } else {
           ht = `<input></input>`
         }
         this.innerHTML += `${k}: ${o[k]} ${ht} <br>`
       })
+      this.innerHTML += '<button onclick="">Insert</button>'
     }
   });
+/*
+  <div id='typeslist'>
+    <input field={fieldname} type={fieldtype}></input>
+  </div>
+  <button></button>
+*/
+  element('part-two', {onmount: this.set(db.schema)})
 </script>
 
 <my-db></my-db>
 <my-dbdetail data="detail"></my-dbdetail>
+<part-two>pt2 {type}</part-two>
