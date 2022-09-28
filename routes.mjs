@@ -1,6 +1,6 @@
 import { eSchema as Validator } from './module.mjs'
 import schema from './schemas/test-schema.mjs' 
-import db from './db.json' assert {type: 'json'}
+import db from './data/db.json' assert {type: 'json'}
 import { isJSON, save } from 'instax'
 
 const { debug, port, routes } = process.env
@@ -23,22 +23,18 @@ export default {
       const [type, id] = p.split(':')
       data = v.validate(data, type)
       db[p] = data
-      save(db, './db.json')
+      save(db, './data/db.json')
       return { ok: action }      
     }
                
     if(action == 'delete') {
       if(!db[p]) throw Error(`delete "${p}" not found`)
       delete db[p]
-      save(db, './db.json')
+      save(db, './data/db.json')
       return { ok: action }
     }
 
     throw Error('invalid call ' + action + ' for ' + p + ', ' + p2)
   },
-  schema: () => schema,
-  client: (r, s) => {
-    s.setHeader('Content-Type', 'application/json');
-    return eSchema.toString() + ' ' + FetchDB.toString() + `window.db = new FetchDB(${JSON.stringify(schema)})`
-  }
+  schema: () => schema
 }

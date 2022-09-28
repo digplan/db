@@ -53,50 +53,6 @@ class eSchema {
     }
 }
 
-class LocalStorageDB extends eSchema {
-  constructor(schema) {
-    super(schema)
-  }
-  insert(id, o, type) {
-    this.validate(o, type)
-    if (localStorage.getItem(id)) throw Error('exists')
-    localStorage.setItem(id, JSON.stringify(o))
-  }
-  update(id, o, type) {
-    this.validate(o, type)
-    if (!localStorage.getItem(id)) throw Error('does not exist')
-    localStorage.setItem(id, JSON.stringify(o))
-  }
-  get(id) {
-    return JSON.parse(localStorage.getItem(id)?.toString())
-  }
-  delete(id) {
-    return localStorage.removeItem(id)
-  }
-}
-
-class StateDB extends eSchema {
-  constructor(schema) {
-    super(schema)
-  }
-  insert(id, o, type) {
-    this.validate(o, type)
-    if (state[id]) throw Error('exists')
-    state[id] = o
-  }
-  update(id, o, type) {
-    this.validate(o, type)
-    if (!state[id]) throw Error('does not exist')
-    state[id] = o
-  }
-  get(id) {
-    return state[id]
-  }
-  delete(id) {
-    delete state[id]
-  }
-}
-
 class FetchDB extends eSchema {
   remoteHost = ''
   dontBreakonError = false
@@ -125,8 +81,9 @@ class FetchDB extends eSchema {
   }
 }
 
-export { eSchema, LocalStorageDB, StateDB, FetchDB }
+export { eSchema, FetchDB }
 globalThis.eSchema = eSchema
-globalThis.LocalStorageDB = LocalStorageDB
-globalThis.StateDB = StateDB
 globalThis.FetchDB = FetchDB
+
+if(globalThis?.schema)
+  globalThis.db = new FetchDB(globalThis)
