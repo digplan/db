@@ -1,29 +1,41 @@
 <script src='https://unpkg.com/enigmatic'></script>
 <script type=module src=https://unpkg.com/e-schema@0.0.6/schemas/test-schema.mjs></script>
 <script type=module src=https://unpkg.com/e-schema@0.0.6></script>
+<link rel=stylesheet href=https://unpkg.com/enigmatic/enigmatic.css>
 
 <script type=module>
   await ready()
-  console.log(db)
 
   customElements.define('my-db', class M extends HTMLElement {
     connectedCallback() {
       const s = new eSchema(schema)
       let i = 0
       Object.keys(db.schema).filter(n=>!n.match(/^_/)).map(typename=>{
-        const td = JSON.stringify(s.getSchemaFor(typename))
-        this.innerHTML += `<button onclick="state.detail = ${td}">${typename}</button>`
+        const td = s.getSchemaFor(typename)
+        window[typename] = td
+        this.innerHTML += `<a href=# onclick="state.detail = window.${typename}">${typename}</a><br>`
       })
     }
   });
 
   customElements.define('my-dbdetail', class M extends HTMLElement {
     set(o) {
-      this.innerHTML = o
+      this.innerHTML = ''
+      const sorted = Object.keys(o).sort()
+      sorted.map(k=>{
+        let ht = ''
+        if(o[k].match(/string|number|boolean|datetype/)) {
+          o[k] = o[k] === 'boolean' ? 'checkbox' : o[k]
+          o[k] = o[k] === 'datetype' ? 'date' : o[k] 
+          ht = `<input type='${o[k]}'></input>`
+        } else {
+          ht = `<input></input>`
+        }
+        this.innerHTML += `${k}: ${o[k]} ${ht} <br>`
+      })
     }
   });
 </script>
 
 <my-db></my-db>
-<br>
 <my-dbdetail data="detail"></my-dbdetail>
