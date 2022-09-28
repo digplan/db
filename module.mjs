@@ -86,4 +86,4 @@ globalThis.eSchema = eSchema
 globalThis.FetchDB = FetchDB
 
 if(globalThis?.schema)
-  globalThis.db = new FetchDB(globalThis)
+  globalThis.db = new FetchDB(globalThis.schema)

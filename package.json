@@ -1,6 +1,6 @@
 {
   "name": "e-schema",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "JSON object validator",
   "main": "module.mjs",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "instaserve": "^0.1.18",
     "instax": "^0.1.5"
   }
