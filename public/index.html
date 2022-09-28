@@ -5,6 +5,14 @@
 <script type=module>
   await ready()
   console.log(db)
+
+  customElements.define('my-db', class M extends HTMLElement {
+    connectedCallback() {
+      Object.keys(db.schema).map(i=>{
+        this.innerHTML += i + ' ' + JSON.stringify(db.schema[i])+ '<br>'
+      })
+    }
+  });
 </script>
 
-test
+<my-db></my-db>
