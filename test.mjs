@@ -1,5 +1,5 @@
 import { eSchema as Validator } from './module.mjs'
-import SchemaDefinition from './test-schema.mjs'
+import SchemaDefinition from './schemas/test-schema.mjs'
 import assert from 'node:assert/strict'
 
 const bad_constructor = () => new Validator()
@@ -75,15 +75,35 @@ assert.equal(explicit.validate({name: 'myname', type: 'mytypeval'}, 'MyType').na
 // Server
 import serve from 'instaserve'
 import routes from './routes.mjs'
-serve(routes)
+const server = serve(routes)
 
 // Fetch DB
 import { FetchDB } from './module.mjs'
-import schema from './test-schema.mjs'
+import schema from './schemas/test-schema.mjs'
+import { save } from 'instax'
 
 const DB = new FetchDB(schema)
 DB.remoteHost = 'http://localhost:3000'
-const insert = await DB.insert('Base:Test2', {id: 'somevalue'}, 'Base')
-console.log(insert)
 
-console.log('test complete')
+const insert = await DB.insert('Base:Test1', {id: 'somevalue'}, 'Base')
+assert.equal(insert.ok, 'insert')
+const del = await DB.delete('Base:Test1')
+assert.equal(del.ok, 'delete')
+const insert2 = await DB.insert('Base:Test2', { id: 'somevalue' }, 'Base')
+assert.equal(insert2.ok, 'insert')
+const update = await DB.update('Base:Test2', { id: 'somevalue2' }, 'Base')
+assert.equal(update.ok, 'update')
+await DB.delete('Base:Test2')
+
+try {
+    await DB.update('Base:notthere', { id: 'somevalue2' }, 'Base')
+} catch(e) {
+    assert.match(e.message, /invalid call update for Base:notthere/)
+}
+
+const [one, two, three] = process.argv
+if(!three)
+  server.stop()
+
+console.log('closing server')
+

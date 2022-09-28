@@ -99,29 +99,30 @@ class StateDB extends eSchema {
 
 class FetchDB extends eSchema {
   remoteHost = ''
+  dontBreakonError = false
   constructor(schema) {
     super(schema)
   }
   async f(url, options) {
-    const fet = await (await fetch(this.remoteHost + url, options)).json()
-    if(fet.error) throw new Error('client error: ' + fet.error)
-    return fet
+    const fet = await fetch(this.remoteHost + url, options)
+    const j = await fet.json()
+    if(!this.dontBreakonError && j.error) throw new Error('client error: ' + j.error)
+    return j
   }
   async insert(id, o, type) {
     this.validate(o, type)
-    return this.f(`/api/insert/${id}/${JSON.stringify(o)}`)
+    return await this.f(`/api/insert/${id}/${JSON.stringify(o)}`)
   }
   async update(id, o, type) {
     this.validate(o, type)
-    return this.f(`/api/update/${id}/${JSON.stringify(o)}`)
+    return await this.f(`/api/update/${id}/${JSON.stringify(o)}`)
   }
   async get(id) {
-    return this.f(`/api/get/${id}`)
+    return await this.f(`/api/get/${id}`)
   }
   async delete(id) {
-    return this.f(`/api/delete/${id}`).ok
+    return await this.f(`/api/delete/${id}`)
   }
-
 }
 
 export { eSchema, LocalStorageDB, StateDB, FetchDB }
