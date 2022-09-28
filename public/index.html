@@ -1,5 +1,5 @@
 <script src='https://unpkg.com/enigmatic'></script>
-<script type=module src=https://unpkg.com/e-schema@0.0.6/schemas/test-schema.mjs></script>
+<script type=module src=http://127.0.0.1:8080/public/schemas/schema.mjs></script>
 <script type=module src=https://unpkg.com/e-schema@0.0.6></script>
 <link rel=stylesheet href=https://unpkg.com/enigmatic/enigmatic.css>
 
@@ -24,10 +24,11 @@
       const sorted = Object.keys(o).sort()
       sorted.map(k=>{
         let ht = ''
-        if(o[k].match(/string|number|boolean|datetype/)) {
+        if(o[k].match(/string|number|boolean|date|color/)) {
           o[k] = o[k] === 'boolean' ? 'checkbox' : o[k]
           o[k] = o[k] === 'datetype' ? 'date' : o[k] 
           ht = `<input type='${o[k]}'></input>`
+          console.log(k + ' ' + o[k] + ' ' + ht)
         } else {
           ht = `<input></input>`
         }
