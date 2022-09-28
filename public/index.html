@@ -1,6 +1,9 @@
+<script src='https://unpkg.com/enigmatic'></script>
 <script type=module src=https://unpkg.com/e-schema/schemas/schema.mjs></script>
 <script type=module src=https://unpkg.com/e-schema></script>
-<script>
+
+<script type=module>
+  await ready()
   window.db = new FetchDB(schema)
 </script>
 
