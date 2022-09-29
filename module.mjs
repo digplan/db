@@ -1,4 +1,4 @@
-class eSchema {
+export class eSchema {
     schema
     constructor(def) {
         if(!def) throw Error('provide a schema definition')
@@ -59,7 +59,7 @@ class eSchema {
     }
 }
 
-class FetchDB extends eSchema {
+export class FetchDB extends eSchema {
   remoteHost = ''
   dontBreakonError = false
   constructor(schema) {
@@ -122,7 +122,14 @@ class FetchDB extends eSchema {
   }
 }
 
-export { eSchema, FetchDB }
+export function str(o) {
+  return JSON.stringify(o)
+}
+
+export function obj(s) {
+  return JSON.parse(s)
+}
+
 globalThis.eSchema = eSchema
 globalThis.FetchDB = FetchDB
 
