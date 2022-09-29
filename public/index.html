@@ -3,6 +3,39 @@
 <script type=module src=https://unpkg.com/e-schema@0.0.6></script>
 <link rel=stylesheet href=https://unpkg.com/enigmatic/enigmatic.css>
 
+<script>
+  element('type-detail', {
+    template: `{$key} <input name='{$key}' type='{_val_}'></input> <br>`,
+    beforeData: (x) => { for(let k in x) if(x[k] === 'boolean') x[k] = 'checkbox'; return x },
+  })
+
+</script>
+
+<div data="types">
+  <a href=# onclick="state.typedetail=db.schema.{$key}">{$key}</a>
+</div>
+
+<form>
+ <type-detail id="det" data="typedetail"></type-detail>
+ <button type="submit">Insert</button>
+</form>
+
+<button onclick="state.types=db.schema">go</button>
+
+<script>
+      function handleSubmit(event) {
+          event.preventDefault()
+          const data = new FormData(event.target)
+          debugger
+          const value = Object.fromEntries(data.entries())
+          console.log({ value })
+        }
+
+        const form = document.querySelector("form")
+        form.addEventListener("submit", handleSubmit);
+
+</script>
+<!--
 <script type=module>
   await ready()
 
@@ -48,3 +81,4 @@
 <my-db></my-db>
 <my-dbdetail data="detail"></my-dbdetail>
 <part-two>pt2 {type}</part-two>
+-->
