@@ -86,20 +86,39 @@ class FetchDB extends eSchema {
     return await this.f(`/api/delete/${id}`)
   }
 
-  // { 'rectype': 'Base', 'recid?': 'Base:myrec', 'name': 'myrec', 'type': 'string' }
-  async insertElements(selector) {
+  convertVals(e) {
+    if((e.getAttribute('type') === 'checkbox') && e.value.match(/on|off/)) 
+      return e.value === 'on' ? true : false
+    return e.value
+  }
+
+  // <input type=string name='name' value='ok'> { 'name': 'name', 'type': 'string' }
+  // <input type=string name='somefield' value='ok2'> { 'name': 'somefield', 'type': 'string' }
+  async insertElements(rectype, selector) {
     const obj = {}
-    let id, type
-    for(const element of document.querySelectorAll(selector)) {
-      obj[element.name] = element.value
-      if(element.name === '') // TODO
-      type = element.getAttribute('rectype')
+    let id
+    var namekey
+    const qs = document.querySelectorAll(selector)
+    if(!qs.length) throw new Error(`no elements could be found for selector: ${selector}`)
+    for(const element of qs) {
+      const [ename, evalue, id] = [element.getAttribute('name'), this.convertVals(element), element.getAttribute('recid')]
+      if(!ename) continue
+      obj[ename] = evalue
+      console.log(`serializing element ${ename} = ${evalue}, (record) id = ${id}`)
+      if(ename === 'name') {
+        namekey = evalue
+      }
+    }
+    if(!id) {
+      console.log(`namekey: ${namekey}`)
+      if (!namekey) throw new Error('db.insertElements() an element with attribute name must be provided')
+      id = `${rectype}:${namekey}`
     }
     if(!Object.keys(obj).length) {
       throw new Error(`db.insertElements() no elements found for selector ${selector}`)
     }
     console.log(`db.insertElements is ${JSON.stringify(obj)}`)
-    return await this.insert(id, obj, type)
+    return await this.insert(id, obj, rectype)
   }
 }
 

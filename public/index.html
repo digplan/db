@@ -5,7 +5,7 @@
 
 <script>
   element('type-detail', {
-    template: `{$key} <input name='{$key}' type='{_val_}' rectype=''></input> <br>`,
+    template: `{$key} <input name='{$key}' type='{_val_}'></input> <br>`,
     beforeData: (x) => { for(let k in x) if(x[k] === 'boolean') x[k] = 'checkbox'; return x },
   })
 </script>
@@ -15,6 +15,6 @@
 </div>
 <type-detail id="det" data="typedetail"></type-detail>
 
-<button onclick='db.insertElements("#det > *")'>Insert</button>
+<button onclick='db.insertElements("Base", "#det > *")'>Insert</button>
 
 <button onclick="state.types=db.schema">go</button>
