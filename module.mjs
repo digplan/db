@@ -85,11 +85,20 @@ class FetchDB extends eSchema {
   async delete(id) {
     return await this.f(`/api/delete/${id}`)
   }
-  async insertElements(id, o, type, selector) {
+
+  // { 'rectype': 'Base', 'recid?': 'Base:myrec', 'name': 'myrec', 'type': 'string' }
+  async insertElements(selector) {
     const obj = {}
-    [...document.querySelectorAll(selector)].map(e => {
-      obj[e.name] = e.value
-    })
+    let id, type
+    for(const element of document.querySelectorAll(selector)) {
+      obj[element.name] = element.value
+      if(element.name === '') // TODO
+      type = element.getAttribute('rectype')
+    }
+    if(!Object.keys(obj).length) {
+      throw new Error(`db.insertElements() no elements found for selector ${selector}`)
+    }
+    console.log(`db.insertElements is ${JSON.stringify(obj)}`)
     return await this.insert(id, obj, type)
   }
 }
