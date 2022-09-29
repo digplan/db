@@ -6,36 +6,12 @@
 <script type=module>
   await ready()
 
-  customElements.define('my-db', class M extends HTMLElement {
+  customElements.define('db-client', class M extends HTMLElement {
     connectedCallback() {
-      const s = new eSchema(schema)
-      let i = 0
-      Object.keys(db.schema).filter(n=>!n.match(/^_/)).map(typename=>{
-        const td = s.getSchemaFor(typename)
-        window[typename] = td
-        this.innerHTML += `<a href=# onclick="state.detail = window.${typename}">${typename}</a><br>`
-      })
+      
     }
-  });
+  })
 
-  customElements.define('my-dbdetail', class M extends HTMLElement {
-    set(o) {
-      this.innerHTML = ''
-      const sorted = Object.keys(o).sort()
-      sorted.map(k=>{
-        let ht = ''
-        if(o[k].match(/string|number|boolean|date|color/)) {
-          o[k] = o[k] === 'boolean' ? 'checkbox' : o[k]
-          ht = `<input field='${k}' type='${o[k]}'></input>`
-          console.log(k + ' ' + o[k] + ' ' + ht)
-        } else {
-          ht = `<input></input>`
-        }
-        this.innerHTML += `${k}: ${o[k]} ${ht} <br>`
-      })
-      this.innerHTML += '<button onclick="">Insert</button>'
-    }
-  });
 /*
   <div id='typeslist'>
     <input field={fieldname} type={fieldtype}></input>

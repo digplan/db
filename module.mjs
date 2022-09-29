@@ -48,6 +48,12 @@ class eSchema {
               throw Error(`created value ${value} for field type ${type} could not be validated`)
             obj[real_field_name] = value
           }
+          if((real_field_name in obj) && !isOptional && obj[real_field_name] === '') {
+            throw Error(`blank value provided for fieldtype ${type} fieldname ${real_field_name}`)
+          }
+          if ((real_field_name in obj) && !isOptional && obj[real_field_name] === undefined) {
+            throw Error(`undefined value provided for fieldtype ${type} fieldname ${real_field_name}`)
+          }
         }
         return obj
     }
@@ -78,6 +84,13 @@ class FetchDB extends eSchema {
   }
   async delete(id) {
     return await this.f(`/api/delete/${id}`)
+  }
+  async insertElements(id, o, type, selector) {
+    const obj = {}
+    [...document.querySelectorAll(selector)].map(e => {
+      obj[e.name] = e.value
+    })
+    return await this.insert(id, obj, type)
   }
 }
 

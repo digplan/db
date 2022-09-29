@@ -1,5 +1,5 @@
 import { eSchema as Validator } from './module.mjs'
-import SchemaDefinition from './schemas/test-schema.mjs'
+import SchemaDefinition from './public/schemas/test-schema.mjs'
 import assert from 'node:assert/strict'
 
 const bad_constructor = () => new Validator()
@@ -71,6 +71,9 @@ const explicit = new Validator(jschema)
 const badvals = () => explicit.validate({}, 'DoesntExist')
 assert.throws(badvals, /Error: provided type DoesntExist does not exist in the schema/)
 assert.equal(explicit.validate({name: 'myname', type: 'mytypeval'}, 'MyType').name, 'myname')
+// fail on key provided - blank value
+const blankTypeField = () => explicit.validate({name: 'myname', type: ''}, 'MyType')
+assert.throws(blankTypeField, /Error: blank value provided for fieldtype string fieldname type/)
 
 // Server
 import serve from 'instaserve'
@@ -79,7 +82,7 @@ const server = serve(routes)
 
 // Fetch DB
 import { FetchDB } from './module.mjs'
-import schema from './schemas/test-schema.mjs'
+import schema from './public/schemas/test-schema.mjs'
 import { save } from 'instax'
 
 const DB = new FetchDB(schema)

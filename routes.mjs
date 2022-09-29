@@ -1,5 +1,5 @@
 import { eSchema as Validator } from './module.mjs'
-import schema from './schemas/test-schema.mjs' 
+import schema from './public/schemas/test-schema.mjs' 
 import db from './data/db.json' assert {type: 'json'}
 import { isJSON, save } from 'instax'
 
