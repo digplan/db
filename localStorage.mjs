@@ -6,20 +6,24 @@ export class LocalStorageDB extends eSchema {
     }
     insert(id, o, type) {
         this.validate(o, type)
-        if (localStorage.getItem(id)) throw new Error(`localStorage.insert(): ${id} exists`)
+        if (localStorage.getItem(id)) 
+          throw new Error(`localStorage.insert(): ${id} exists`)
         localStorage.setItem(id, str(o))
         return {ok: 'insert'}
     }
     update(id, o, type) {
         this.validate(o, type)
-        if (!localStorage.getItem(id)) throw new Error(`localStorage.update(): ${id} does not exist`)
+        if (!localStorage.getItem(id)) 
+          throw new Error(`localStorage.update(): ${id} does not exist`)
         localStorage.setItem(id, str(o))
         return {ok: 'update'}
     }
     get(id) {
-        return JSON.parse(localStorage.getItem(id)?.toString())
+        return JSON.parse(localStorage.getItem(id))
     }
     delete(id) {
+        if (!localStorage.getItem(id)) 
+          throw new Error(`localStorage.delete(): ${id} does not exist`)
         localStorage.removeItem(id)
         return {ok: 'delete'}
     }
