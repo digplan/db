@@ -55,4 +55,4 @@ export class LocalStorageDB extends eSchema {
     }
 }
 
-globalThis.LocalStorageDB = LocalStorageDB
+globalThis.db = new LocalStorageDB(schema)
