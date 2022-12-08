@@ -12,16 +12,16 @@ export default {
     insert: ({ key }, s, data) => {
         db[key] = data
         FS.writeFileSync('./db.json', JSON.stringify(db, null, 2))
-        return data
     },
-    update: (r, s, d) => {
-        if (!db[r.key]) throw Error('not found')
-        return this.insert(r, s, d)
+    update: ({ key }, s, data) => {
+        if (!db[key]) throw Error('not found')
+        db[key] = data
+        FS.writeFileSync('./db.json', JSON.stringify(db, null, 2))
     },
     delete: ({ tok, key }) => {
-        const ok = delete db[key]
+        if (!db[key]) throw Error('not found')
+        delete db[key]
         FS.writeFileSync('./db.json', JSON.stringify(db, null, 2))
-        return ok
     },
     get: ({ key }) => {
         return db[key]
