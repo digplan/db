@@ -1,11 +1,11 @@
 import FS from 'node:fs'
 const db = JSON.parse(FS.readFileSync('./db.json').toString('utf8'))
-const tokens = {}
+const tokens = {'mytoken': true}
 
 export default {
     _: (r) => { r.key = r.url.split('/').pop(); r.tok = r.headers.t },
-    insert: ({ headers, key }, s, data) => {
-        if(!tokens[r.tok]) throw Error('not auth')
+    insert: ({ tok, key }, s, data) => {
+        if(!tokens[tok]) throw Error('not auth')
         db[key] = data
         FS.writeFileSync('./db.json', JSON.stringify(db, null, 2))
         return data
@@ -14,14 +14,14 @@ export default {
         if (!db[r.key]) throw Error('not found')
         return this.insert(r, s, d)
     },
-    delete: ({ headers, key }) => {
-        if(!tokens[r.tok]) throw Error('not auth')
+    delete: ({ tok, key }) => {
+        if(!tokens[tok]) throw Error('not auth')
         const ok = delete db[key]
         FS.writeFileSync('./db.json', JSON.stringify(db, null, 2))
         return ok
     },
-    get: ({ key }) => {
-        if(!tokens[r.tok]) throw Error('not auth')
+    get: ({ key, tok }) => {
+        if(!tokens[tok]) throw Error('not auth')
         return db[key]
     },
     login: ({ headers }) => {
