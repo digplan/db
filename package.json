@@ -1,17 +1,4 @@
 {
-  "name": "e-schema",
-  "version": "0.0.7",
-  "description": "JSON object validator",
-  "main": "module.mjs",
-  "scripts": {
-    "test": "node --no-warnings test.mjs",
-    "build": "npx c-toml schema.toml && echo \"export default $(cat schema.json)\" > schema.mjs && rm schema.json",
-    "start": "node --no-warnings server.mjs"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "instaserve": "^0.1.18",
-    "instax": "^0.1.5"
-  }
+  "name": "dbsimple",
+  "version": "0.0.1"
 }
